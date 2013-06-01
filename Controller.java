@@ -1,6 +1,11 @@
 
 
-public static Controller
-// Some epic comments going on here
+public class Controller implements ActionListener{
 
-system.out.println("Im a big time code writer");
+	public Controller(Model m) {
+		
+	}
+
+	system.out.println("Im a big time code writer");
+	private Model model;
+}
