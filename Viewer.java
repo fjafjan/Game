@@ -30,9 +30,11 @@ public class Viewer extends JFrame{
 	//	int model = fulmodel;
 		panel = new JPanel();
 		getContentPane().add(panel);
+        panel.setLayout(new BorderLayout());
 		
-		panel.setLayout(new GridLayout(gameWidth,gameHeight));
-		
+        JPanel menuPanel = new JPanel();
+        menuPanel.setLayout(null);
+
 		JButton quitButton = new JButton("Quit");
 		quitButton.setBounds(50,60,80,30); // What do these numbers mean?
 		quitButton.addActionListener(new ActionListener(){
@@ -41,8 +43,8 @@ public class Viewer extends JFrame{
 			}
 		});
 		
-		panel.add(quitButton);
-		
+		menuPanel.add(quitButton);
+
 		JButton startButton = new JButton("Start game!");
 		startButton.setBounds(90,100,120,40);
 		startButton.addActionListener(new ActionListener(){
@@ -52,7 +54,9 @@ public class Viewer extends JFrame{
 			}
 		});
 		
-		panel.add(startButton);
+		menuPanel.add(startButton);
+        
+        panel.add(menuPanel, BorderLayout.LINE_START);
 		
 		setTitle("Just trying stuff out");
 		windowWidth = 300;
@@ -77,6 +81,8 @@ public class Viewer extends JFrame{
 	}
 	
 	public static void drawGame(){
+        JPanel gamePanel = new JPanel();
+        gamePanel.setLayout(new GridLayout(gameWidth,gameHeight));
 		int[][] gameState = fulskapa();
 		xpos = 0;ypos = 0;
 		int xStep = windowWidth/gameState.length;
@@ -87,6 +93,7 @@ public class Viewer extends JFrame{
 				int drawType = gameState[i][j];
                 final RectangularShape drawObj;
                 final Color chosenColor;
+                final RectangularShape contour = new Rectangle2D.Double(0,0,xStep,yStep);
 				switch(drawType){
 					case 0:
                         drawObj = new Rectangle2D.Double(0,0,xStep,yStep);
@@ -110,18 +117,22 @@ public class Viewer extends JFrame{
                         break;
 
 				}
-                panel.add(new JPanel(){
+                gamePanel.add(new JPanel(){
                     public void paintComponent(Graphics g){
                         super.paintComponent(g);
                         Graphics2D g2 = (Graphics2D)g;
                         
                         g2.setColor(chosenColor);
                         //RectangularShape drawObj = (RectangularShape) drawObj;
-                        g2.draw(drawObj);
+                        g2.fill(drawObj);
+                        g2.setColor(Color.black);
+                        g2.draw(contour);
                     }
                 });
 
-			}	
+			}
+//            panel.add(gamePanel, BorderLayout.CENTER);	
+//            panel.pack()
 		}
 	}
 						
