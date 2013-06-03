@@ -1,4 +1,4 @@
-java "Viewer"
+java "Main"
 
 pause
 del "%0"

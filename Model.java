@@ -14,15 +14,15 @@ public class Model {
         // Set intial character pos
         currentPosX = (XSIZE + XRES)/2;
         currentPosY = (YSIZE + YRES)/2;
-        gameMap[currentPosX][currentPosY] = 2
+        gameMap[currentPosX][currentPosY] = 2;
         // Init some random walls on the map
-        gameMap[125][125] = 1
-        gameMap[125][126] = 1
-        gameMap[125][127] = 1
-        gameMap[125][128] = 1
-        gameMap[125][129] = 1
-        gameMap[125][130] = 1
-        gameMap[125][131] = 1
+        gameMap[125][125] = 1;
+        gameMap[125][126] = 1;
+        gameMap[125][127] = 1;
+        gameMap[125][128] = 1;
+        gameMap[125][129] = 1;
+        gameMap[125][130] = 1;
+        gameMap[125][131] = 1;
     }
 
     // Returns current state of the game

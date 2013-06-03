@@ -16,14 +16,20 @@ public class Viewer extends JFrame{
     private static int ypos;
     private static int windowWidth;
     private static int windowHeight;
-    // This should of course be modified
-    private final static int gameWidth = 10;
-    private final static int gameHeight= 10;
-
+    private static int gameWidth; // I want these to be final but it won't compile...
+    private static int gameHeight;
+    
 	private static JPanel panel;
-
-	public Viewer(){
-		initUI();		
+	
+	private Model gameModel;
+	private Controller gameController;
+	
+	public Viewer(Controller gameController){
+		gameModel = gameController.getModel();
+		int[][] gameState = gameModel.getGameState();
+		gameWidth = gameState.length;
+		gameHeight= gameState[0].length;
+		initUI();
 	}
 
 	public final void initUI(){
@@ -37,23 +43,14 @@ public class Viewer extends JFrame{
 
 		JButton quitButton = new JButton("Quit");
 		quitButton.setBounds(50,60,80,30); // What do these numbers mean?
-		quitButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent event){
-				System.exit(0);
-			}
-		});
-		
+		quitButton.addActionListener(gameController);
+		quitButton.setActionCommand("quit");
 		menuPanel.add(quitButton);
 
 		JButton startButton = new JButton("Start game!");
 		startButton.setBounds(90,100,120,40);
-		startButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent event){
-				// start the game!
-				int a = 4;
-			}
-		});
-		
+		startButton.addActionListener(gameController);
+		startButton.setActionCommand("start");
 		menuPanel.add(startButton);
         
         panel.add(menuPanel, BorderLayout.LINE_START);
@@ -66,24 +63,24 @@ public class Viewer extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
-	public static void main(String args[]){
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run(){
-				Viewer view = new Viewer();
-                view.drawGame();
-				view.setVisible(true);
-			}
-		});
-	}
+	//~ public static void main(String args[]){
+		//~ SwingUtilities.invokeLater(new Runnable() {
+			//~ public void run(){
+				//~ Viewer view = new Viewer();
+                //~ view.drawGame();
+				//~ view.setVisible(true);
+			//~ }
+		//~ });
+	//~ }
 	
 	public static void startGame(){
 		// nothing for now?
 	}
 	
-	public static void drawGame(){
+	public void drawGame(){
         JPanel gamePanel = new JPanel();
         gamePanel.setLayout(new GridLayout(gameWidth,gameHeight));
-		int[][] gameState = fulskapa();
+		int[][] gameState = gameModel.getGameState();
 		xpos = 0;ypos = 0;
 		int xStep = windowWidth/gameState.length;
 		int yStep = windowHeight/gameState[0].length;
@@ -131,8 +128,8 @@ public class Viewer extends JFrame{
                 });
 
 			}
-//            panel.add(gamePanel, BorderLayout.CENTER);	
-//            panel.pack()
+            panel.add(gamePanel, BorderLayout.CENTER);	
+            //~ panel.pack()
 		}
 	}
 						
@@ -156,15 +153,3 @@ public class Viewer extends JFrame{
 	}
 }
 
-	//public Viewer(Display display){
-		//Shell shell = new Shell(display);
-		//shell.setText("hejsan");
-		//shell.setSize(200,200);
-		////center(shell)
-		//shell.open();
-		
-	//}
-	//public static void main(String[] args){
-		//Display display = new Display();
-		//new Viewer(display);
-		//display.dispose()
