@@ -22,13 +22,13 @@ public class Controller implements ActionListener, KeyListener{
 	public void keyPressed(KeyEvent e){
 		String keyPressed = e.getKeyText(e.getKeyCode());
 		System.out.println(keyPressed);
-		if(keyPressed == "W" || keyPressed == "Up"{
+		if(keyPressed == "W" || keyPressed == "Up"){
 			// tell game to move up
-		}else if{(keyPressed == "S" || keyPressed == "Down"{
+		}else if(keyPressed == "S" || keyPressed == "Down"){
 			// tell game to move down
-		}else if{(keyPressed == "A" || keyPressed == "Left"{
+		}else if(keyPressed == "A" || keyPressed == "Left"){
 			// Tell the game to shake it to the beat
-		}else if{(keyPressed == "D" || keyPressed == "Right"{
+		}else if(keyPressed == "D" || keyPressed == "Right"){
 			// whatever
 		}
 	}

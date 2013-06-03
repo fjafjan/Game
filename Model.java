@@ -50,7 +50,7 @@ public class Model {
             break;
         }
     }
-    
+     
     
     
     private void initGameMap() {
