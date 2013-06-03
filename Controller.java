@@ -12,7 +12,7 @@ public class Controller implements ActionListener, KeyListener{
 		switch(action){
 		case("quit"): System.exit(0);
 			break;
-		case("start"): // Start the game!
+		case("start"): model.processInput("start");// Start the game!
 			break;
 		}
 		// add other cases here as needed? We might need to "implement" some kind of 
@@ -24,12 +24,16 @@ public class Controller implements ActionListener, KeyListener{
 		System.out.println(keyPressed);
 		if(keyPressed == "W" || keyPressed == "Up"){
 			// tell game to move up
+			model.processInput("w");
 		}else if(keyPressed == "S" || keyPressed == "Down"){
 			// tell game to move down
+			model.processInput("s");
 		}else if(keyPressed == "A" || keyPressed == "Left"){
 			// Tell the game to shake it to the beat
+			model.processInput("a");
 		}else if(keyPressed == "D" || keyPressed == "Right"){
 			// whatever
+			model.processInput("d");
 		}
 	}
 	

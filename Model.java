@@ -1,5 +1,6 @@
+import java.util.Observable;
 
-public class Model {
+public class Model extends Observable{
         
     // Constructor
     public Model() {
@@ -48,7 +49,11 @@ public class Model {
             break;
             case "d": updateCurrentPosition(currentPosX + 1, currentPosY);
             break;
+            case "start":  currentPosX = (XSIZE + XRES)/2;
+                           currentPosY = (YSIZE + YRES)/2;
+                           break;
         }
+        notifyObservers();
     }
      
     
