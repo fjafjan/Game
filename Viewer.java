@@ -54,7 +54,6 @@ public class Viewer extends JFrame{
 		menuPanel.add(startButton);
         
         panel.add(menuPanel, BorderLayout.LINE_START);
-		
 		setTitle("Just trying stuff out");
 		windowWidth = 300;
 		windowHeight = 400;

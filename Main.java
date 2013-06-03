@@ -15,10 +15,11 @@ public class Main{
 		Model gameModel = new Model();
 		Controller gameController = new Controller(gameModel);
 		Viewer gameViewer = new Viewer(gameController);
+		gameViewer.addKeyListener(gameController);
+		gameViewer.setFocusable(true);
+
 		gameViewer.drawGame();
 		gameViewer.setVisible(true);
-        System.out.println("Hejsan");
-        System.out.println(Color.blue);
         System.out.println(Color.gray);
     }
 }
