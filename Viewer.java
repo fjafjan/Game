@@ -36,24 +36,40 @@ public class Viewer extends JFrame{
 	//	int model = fulmodel;
 		panel = new JPanel();
 		getContentPane().add(panel);
-        panel.setLayout(new BorderLayout());
+        //~ panel.setLayout(new BorderLayout());
+		panel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+
+
 		
         JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(null);
+        menuPanel.setLayout(new GridBagLayout());
 
 		JButton quitButton = new JButton("Quit");
 		quitButton.setBounds(50,60,80,30); // What do these numbers mean?
 		quitButton.addActionListener(gameController);
 		quitButton.setActionCommand("quit");
-		menuPanel.add(quitButton);
+		c.fill = GridBagConstraints.BOTH;
+        c.gridx = 1;
+        c.gridy = 0;
+		c.weightx = 0.5;
+        c.weighty = 0.5;
+		menuPanel.add(quitButton, c);
 
+        
 		JButton startButton = new JButton("Start game!");
 		startButton.setBounds(90,100,120,40);
 		startButton.addActionListener(gameController);
 		startButton.setActionCommand("start");
-		menuPanel.add(startButton);
+		c.gridx = 0;
+		menuPanel.add(startButton, c);
         
-        panel.add(menuPanel, BorderLayout.LINE_START);
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx = 0;
+        c.gridy = 0;
+		c.weightx = 0.5;
+        c.weighty = 0.5;
+        panel.add(menuPanel, c);
 		setTitle("Just trying stuff out");
 		windowWidth = 300;
 		windowHeight = 400;
@@ -77,62 +93,39 @@ public class Viewer extends JFrame{
 	}
 	
 	public void drawGame(){
-        JPanel gamePanel = new JPanel();
-        gamePanel.setLayout(new GridLayout(gameWidth,gameHeight));
 		int[][] gameState = gameModel.getGameState();
+
+        GamePanel gamePanel = new GamePanel(gameState, windowWidth, windowHeight);
+        //~ gamePanel.setPreferredSize(new Dimension(windowWidth, windowHeight));
+        GridBagConstraints c 	 = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 0.5;
+        c.weighty = 0.5;
+        c.gridx = 0;
+        c.gridy = 1;
+        //~ c.gridwidth = 3;
+        //~ c.gridheight= 3;
+		//~ gamePanel.setLayout(gameLayout);
+        //~ gamePanel.setLayout(new GridLayout(gameWidth,gameHeight));
 		xpos = 0;ypos = 0;
 		int xStep = windowWidth/gameState.length;
 		int yStep = windowHeight/gameState[0].length;
-		
-		for(int i=0;i<gameState.length;i++){
-			for(int j=0;j<gameState[0].length;j++){
-				int drawType = gameState[i][j];
-                final RectangularShape drawObj;
-                final Color chosenColor;
-                final RectangularShape contour = new Rectangle2D.Double(0,0,xStep,yStep);
-				switch(drawType){
-					case 0:
-                        drawObj = new Rectangle2D.Double(0,0,xStep,yStep);
-                        chosenColor = Color.white;
-                        break;
-                    case 1:
-                        drawObj = new Rectangle2D.Double(0,0,xStep,yStep);
-                        chosenColor = Color.gray;
-                        break;
-                    case 2:
-                        drawObj = new Ellipse2D.Double(0,0,xStep,yStep);
-                        chosenColor = Color.blue;
-                        break;
-                    case 3:
-                        drawObj = new Ellipse2D.Double(0,0,xStep,yStep);
-                        chosenColor = Color.red;
-                        break;
-                    default:
-                        drawObj = new Rectangle2D.Double(0,0,xStep,yStep);
-                        chosenColor = Color.white;
-                        break;
-
-				}
-                gamePanel.add(new JPanel(){
-                    public void paintComponent(Graphics g){
-                        super.paintComponent(g);
-                        Graphics2D g2 = (Graphics2D)g;
-                        
-                        g2.setColor(chosenColor);
-                        //RectangularShape drawObj = (RectangularShape) drawObj;
-                        g2.fill(drawObj);
-                        g2.setColor(Color.black);
-                        g2.draw(contour);
-                    }
-                });
-
-			}
-            panel.add(gamePanel, BorderLayout.CENTER);	
-            //~ panel.pack()
-		}
+		panel.add(gamePanel, c);	
+		gamePanel.repaint();
+		panel.repaint();
 	}
-						
-		// gameState = model.getGameState();
+
 		
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+	
+
+=======
+>>>>>>> db6eba4154f2db8a8f7a1f989a52da31f661340e
+=======
+>>>>>>> db6eba4154f2db8a8f7a1f989a52da31f661340e
+=======
+>>>>>>> db6eba4154f2db8a8f7a1f989a52da31f661340e
 }
 
