@@ -9,6 +9,7 @@ public class Controller implements ActionListener, KeyListener{
 	}
 	public void actionPerformed(ActionEvent e){
 		String action = e.getActionCommand();
+        System.out.println(action);
 		switch(action){
 		case("quit"): System.exit(0);
 			break;

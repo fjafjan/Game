@@ -21,9 +21,9 @@ public class Model extends Observable{
         gameMap[125][126] = 1;
         gameMap[125][127] = 1;
         gameMap[125][128] = 1;
-        gameMap[125][129] = 1;
-        gameMap[125][130] = 1;
-        gameMap[125][131] = 1;
+        gameMap[225][229] = 1;
+        gameMap[175][170] = 1;
+        gameMap[155][151] = 1;
     }
 
     // Returns current state of the game
@@ -53,6 +53,9 @@ public class Model extends Observable{
                            currentPosY = (YSIZE + YRES)/2;
                            break;
         }
+        // This needs to be called for the notifyObservers to actually
+        // notify observers. INTUITIVE!
+        setChanged();                     
         notifyObservers();
     }
      

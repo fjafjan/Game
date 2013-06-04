@@ -17,6 +17,7 @@ public class Main{
 		Viewer gameViewer = new Viewer(gameController);
 		gameViewer.addKeyListener(gameController);
 		gameViewer.setFocusable(true);
+        gameModel.addObserver(gameViewer);
 
 		gameViewer.drawGame();
 		gameViewer.setVisible(true);
