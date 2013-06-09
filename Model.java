@@ -4,8 +4,8 @@ public class Model extends Observable{
         
     // Constructor
     public Model() {
-        XSIZE = 300;
-        YSIZE = 300;
+        XSIZE = 100;
+        YSIZE = 100;
         XRES = 30;
         YRES = 30;
         // Create a gameMap with some buffer with zeroes.
@@ -16,14 +16,23 @@ public class Model extends Observable{
         currentPosX = (XSIZE + XRES)/2;
         currentPosY = (YSIZE + YRES)/2;
         gameMap[currentPosX][currentPosY] = 2;
-        // Init some random walls on the map
-        gameMap[125][125] = 1;
-        gameMap[125][126] = 1;
-        gameMap[125][127] = 1;
-        gameMap[125][128] = 1;
-        gameMap[225][229] = 1;
-        gameMap[175][170] = 1;
-        gameMap[155][151] = 1;
+        //initGameWallBorder();
+    }
+    
+    // Method that sets border to wall.
+    private void initGameWallBorder() {
+        // First do long side
+        for (int i=0; i<XRES/2; i++) {
+            for (int j=0; j<YSIZE+YRES; j++) {
+                gameMap[i][j] = gameMap[i+XSIZE][j] = 1;
+            }
+        }
+        // Then do short side. ATM corners are done twice.
+        for (int i=0; i<YRES/2; i++) {
+            for (int j=0; j<XSIZE; j++) {
+                gameMap[j][i] = gameMap[j][i+YSIZE] = 1;
+            }
+        }
     }
 
     // Returns current state of the game
@@ -41,11 +50,12 @@ public class Model extends Observable{
     // Changes the game state. Called by controller.
     public void processInput (String event) {
         switch (event) {
-            case "w": updateCurrentPosition(currentPosX, currentPosY + 1);
+            case "w": System.out.println("upate got to model"); 
+            updateCurrentPosition(currentPosX, currentPosY - 1);
             break;
             case "a": updateCurrentPosition(currentPosX - 1, currentPosY);
             break;
-            case "s": updateCurrentPosition(currentPosX, currentPosY - 1);
+            case "s": updateCurrentPosition(currentPosX, currentPosY + 1);
             break;
             case "d": updateCurrentPosition(currentPosX + 1, currentPosY);
             break;
@@ -54,7 +64,7 @@ public class Model extends Observable{
                            break;
         }
         // This needs to be called for the notifyObservers to actually
-        // notify observers. INTUITIVE!
+        // notify observers. INTUITIVE! HAHAHA.
         setChanged();                     
         notifyObservers();
     }
@@ -64,14 +74,17 @@ public class Model extends Observable{
     private void initGameMap() {
         for (int i=0; i<XSIZE + XRES; i++) {
             for (int j=0; j<YSIZE + YRES; j++) {
-                gameMap[i][j]=0;
+                gameMap[i][j]=1;
             }
         }
     }
     
     // Method to update current position of protagonist
     private void updateCurrentPosition (int newX, int newY) {
+        // First delete sprite from old position
+        gameMap[currentPosX][currentPosY] = 0;
         // Check if x position is ok
+        System.out.println("Got to updatePos");
         if ( (XSIZE - newX) >= XRES/2 && (newX >= XRES/2) ) {
             currentPosX = newX;
         }
@@ -79,6 +92,8 @@ public class Model extends Observable{
         if ( (YSIZE - newY) >= YRES/2 && (newY >= YRES/2) ) {
             currentPosY = newY;
         } 
+        // Place character in new position
+        gameMap[currentPosX][currentPosY] = 2;
     }
     
     // Constants that determine size of playing field in tiles.

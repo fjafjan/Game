@@ -23,16 +23,17 @@ public class Controller implements ActionListener, KeyListener{
 	public void keyPressed(KeyEvent e){
 		String keyPressed = e.getKeyText(e.getKeyCode());
 		System.out.println(keyPressed);
-		if(keyPressed == "W" || keyPressed == "Up"){
+		if(keyPressed.equals("W") || keyPressed.equals("Up")){
 			// tell game to move up
+			System.out.println("w pressed");
 			model.processInput("w");
-		}else if(keyPressed == "S" || keyPressed == "Down"){
+		}else if(keyPressed.equals("S") || keyPressed.equals("Down")){
 			// tell game to move down
 			model.processInput("s");
-		}else if(keyPressed == "A" || keyPressed == "Left"){
+		}else if(keyPressed.equals("A") || keyPressed.equals("Left")){
 			// Tell the game to shake it to the beat
 			model.processInput("a");
-		}else if(keyPressed == "D" || keyPressed == "Right"){
+		}else if(keyPressed.equals("D") || keyPressed.equals("Right")){
 			// whatever
 			model.processInput("d");
 		}
@@ -40,7 +41,7 @@ public class Controller implements ActionListener, KeyListener{
 	
 	public void keyReleased(KeyEvent e){
 		// Let's just do nothing atm!
-	}
+	} 
 	
 	public void keyTyped(KeyEvent e){
 		// Whateverrrrr 
