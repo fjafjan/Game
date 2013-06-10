@@ -21,14 +21,12 @@ public class GamePanel extends JPanel{
         gameState = gameStateIn;
         windowWidth = width;
         windowHeight = height;
-        System.out.println(windowWidth + " and also" + windowHeight);
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         xPos = 0;yPos = 0;
 		int xStep = windowWidth/gameState.length;
 		int yStep = windowHeight/gameState[0].length;
-        System.out.println(xStep + " and" + yStep);
 		for(int i=0;i<gameState.length;i++){
             xPos = i*xStep;
             yPos = 0;
@@ -37,7 +35,6 @@ public class GamePanel extends JPanel{
 				int drawType = gameState[i][j];
                 RectangularShape drawObj;
                 Color chosenColor;
-                System.out.println("xpos "+xPos+" ypos "+yPos);
                 RectangularShape contour = new Rectangle2D.Double(xPos,yPos,xStep,yStep);
                 // Gives us what to draw given the game state
                 // I should probably re-write this as a separate method 

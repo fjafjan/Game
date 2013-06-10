@@ -98,7 +98,6 @@ public class Viewer extends JFrame implements Observer{
 	}
 	
     public void update(Observable obs, Object o){
-        System.out.println("Viewer has been notified of change");
         drawGame();
     }
     
@@ -119,13 +118,13 @@ public class Viewer extends JFrame implements Observer{
         xStep = windowWidth/gameState.length;
 		yStep = windowHeight/gameState[0].length;
 
-        System.out.println(xStep + " and" + yStep);
-        for(int i=0;i<gameState.length;i++){
-            System.out.println("");
-            for(int j=0;j<gameState[0].length;j++){
-                System.out.print(gameState[i][j]);
-            }
-        }
+        //~ System.out.println(xStep + " and" + yStep);
+        //~ for(int i=0;i<gameState.length;i++){
+            //~ System.out.println("");
+            //~ for(int j=0;j<gameState[0].length;j++){
+                //~ System.out.print(gameState[i][j]);
+            //~ }
+        //~ }
 
         for(int i=0;i<gameState.length;i++){
             xPos = i*xStep;
@@ -167,6 +166,8 @@ public class Viewer extends JFrame implements Observer{
         //~ gameHolder.setLayout(new BoxLayout(gameHolder,  BoxLayout.PAGE_AXIS));
         //~ gameHolder.add(gamePanel);
 		//~ panel.add(gameHolder, c);
+        RuneDrawer runeDraw = new RuneDrawer();
+        gamePanel.addMouseMotionListener(runeDraw);
         panel.add(gamePanel,c);	
 		//~ gamePanel.repaint();
         //~ panel.add(oldFrame, c);
