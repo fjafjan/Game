@@ -167,6 +167,7 @@ public class Viewer extends JFrame implements Observer{
         //~ gameHolder.add(gamePanel);
 		//~ panel.add(gameHolder, c);
         RuneDrawer runeDraw = new RuneDrawer();
+        gamePanel.addMouseListener(runeDraw);
         gamePanel.addMouseMotionListener(runeDraw);
         panel.add(gamePanel,c);	
 		//~ gamePanel.repaint();
