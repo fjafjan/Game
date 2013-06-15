@@ -5,6 +5,6 @@ public abstract class NPC {
 public void 
 
 abstract void interact();
-
+    // There are some cool comments going on here.
 
 }
