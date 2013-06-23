@@ -117,7 +117,7 @@ public class Viewer extends JFrame implements Observer{
         
         xPos = 0;yPos = 0;
         xStep = windowWidth/gameState.length;
-		yStep = windowHeight/gameState[0].length;
+	yStep = xStep; //windowHeight/gameState[0].length;
 
         //~ System.out.println(xStep + " and" + yStep);
         //~ for(int i=0;i<gameState.length;i++){
