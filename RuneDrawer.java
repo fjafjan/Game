@@ -13,8 +13,10 @@ import javax.swing.JLabel;
 
 import java.util.ArrayList;
 
+import java.awt.image.BufferedImage;
 
-
+import javax.imageio.ImageIO;
+import java.io.*;
 
 
 public class RuneDrawer implements MouseListener, MouseMotionListener{    
@@ -65,6 +67,16 @@ public class RuneDrawer implements MouseListener, MouseMotionListener{
             System.out.println("Rune is finished drawing. Our result was");
             isDrawing = false;  // We are done drawing 
             currentRune.printRune();
+            int[] corners = currentRune.getCorners();
+            System.out.println(""+corners[0]+","+corners[1]+","+corners[2]+","+corners[3]);
+            BufferedImage img = currentRune.returnImage();
+            File f = new File("MyFile.png");
+            try{
+                ImageIO.write(img, "PNG",  f);
+            }catch(IOException eee){
+                System.out.println("What the fuuu");
+            }
+            System.out.println("Done!");
         }
     }
      
