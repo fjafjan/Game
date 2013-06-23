@@ -12,15 +12,15 @@ import javax.swing.SwingUtilities;
 
 public class Main{
     public static void main(String[] args ){
-		Model gameModel = new Model();
-		Controller gameController = new Controller(gameModel);
-		Viewer gameViewer = new Viewer(gameController);
-		gameViewer.addKeyListener(gameController);
-		gameViewer.setFocusable(true);
+	Model gameModel = new Model();
+	Controller gameController = new Controller(gameModel);
+	Viewer gameViewer = new Viewer(gameController);
+	gameViewer.addKeyListener(gameController);
+	gameViewer.setFocusable(true);
         gameModel.addObserver(gameViewer);
 
-		gameViewer.drawGame();
-		gameViewer.setVisible(true);
+	gameViewer.drawGame();
+	gameViewer.setVisible(true);
         System.out.println(Color.gray);
     }
 }
