@@ -22,5 +22,10 @@ public class Main{
 		gameViewer.drawGame();
 		gameViewer.setVisible(true);
         System.out.println(Color.gray);
+        
+        int a = 26;
+        int b = 7;
+        double test = (double)a/b;
+        System.out.println(""+test*a);
     }
 }

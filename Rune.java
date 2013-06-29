@@ -13,8 +13,13 @@ class Rune{
     private ArrayList<Point> runeList;
 
     public Rune(){
+        //~ this(null)
         runeList = new ArrayList<Point>();
     }
+    //~ 
+    //~ public Rune(BufferedImage im){
+        //~ this(null)
+    //~ }
     
     public void addPoint(Point p){
         runeList.add(p);
@@ -42,6 +47,8 @@ class Rune{
         int maxX = 0;
         int maxY = 0;
         int iminX, iminY, imaxX, imaxY;
+        // Current problem: is no movement is made we get error.
+        //~ System.out.println("Runelist size is "+ runeList.size());
         for(int i=0;i<runeList.size();i++){
             int currX = (int) runeList.get(i).getX();
             int currY = (int) runeList.get(i).getY();
@@ -83,8 +90,8 @@ class Rune{
         int white = Color.white.getRGB();
 
         // Make the whole image black
-        for(int i=0;i<runeWidth;i++){
-            for(int j=0;j<runeHeight;j++){
+        for(int i=0;i<=runeWidth;i++){
+            for(int j=0;j<=runeHeight;j++){
                 runeImage.setRGB(i,j,white);
             }
         }
