@@ -39,6 +39,19 @@ public class CharacterTracker {
 	return characters.values();
     }
 
+    public boolean isOccupied(Position pos) {
+	if (pos.equals(getPlayerPosition())) {
+	    return true;
+	}
+	Iterator<Character> iter = getNPClist().iterator();
+	while (iter.hasNext()) {
+	    if (pos.equals(iter.next().getPosition())) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     /* This method is potentially quite slow, could be speeded up by
     keeping to sorted sets of characters, sorted by their x and y
     coordinate, respectively. Then, only characters within length

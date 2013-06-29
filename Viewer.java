@@ -53,8 +53,9 @@ public class Viewer extends JFrame implements Observer{
 
 		JButton quitButton = new JButton("Quit");
 		//~ quitButton.setBounds(50,60,80,30); // What do these numbers mean?
-		quitButton.addActionListener(gameController);
 		quitButton.setActionCommand("quit");
+		quitButton.addActionListener(gameController);
+
 		c.fill = GridBagConstraints.BOTH;
         c.gridx = 1;
         c.gridy = 0;
@@ -65,8 +66,8 @@ public class Viewer extends JFrame implements Observer{
         
 		JButton startButton = new JButton("Start game!");
 		//~ startButton.setBounds(90,100,120,80);
-		startButton.addActionListener(gameController);
 		startButton.setActionCommand("start");
+		startButton.addActionListener(gameController);
 		c.gridx = 0;
 		menuPanel.add(startButton, c);
         
@@ -77,7 +78,7 @@ public class Viewer extends JFrame implements Observer{
         //~ c.weighty = 0.1;
         panel.add(menuPanel, c);
 		setTitle("Just trying stuff out");
-		windowWidth = 300;
+		windowWidth = 350;
 		windowHeight = 400;
 		setSize(windowWidth,windowHeight);
 		setLocationRelativeTo(null);
@@ -117,7 +118,7 @@ public class Viewer extends JFrame implements Observer{
         
         xPos = 0;yPos = 0;
         xStep = windowWidth/gameState.length;
-		yStep = windowHeight/gameState[0].length;
+	yStep = xStep; //windowHeight/gameState[0].length;
 
         //~ System.out.println(xStep + " and" + yStep);
         //~ for(int i=0;i<gameState.length;i++){

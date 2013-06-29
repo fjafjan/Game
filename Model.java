@@ -1,4 +1,6 @@
 import java.util.Observable;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class Model extends Observable{
         
@@ -9,93 +11,125 @@ public class Model extends Observable{
         XRES = 30;
         YRES = 30;
         // Create a gameMap with some buffer with zeroes.
-        gameMap = new int[XSIZE + XRES][YSIZE + YRES];
+        gameMap = new GameMap(XSIZE + XRES, YSIZE + YRES);
+	gameMap.generateRandomMap();
         gameState = new int[XRES][YRES];
-        initGameMap();
+
+	// Create a characterTracker
+	cTracker = new CharacterTracker();
         // Set intial character pos
-        currentPosX = (XSIZE + XRES)/2;
-        currentPosY = (YSIZE + YRES)/2;
-        gameMap[currentPosX][currentPosY] = 2;
+	int initX = (XSIZE + XRES)/2;
+	int initY = (YSIZE + YRES)/2;
+	Position initPos = new Position(initX, initY);
+	player = new PlayerCharacter(10, 10, "player", 10, cTracker, initPos, gameMap);
+	// Lets add some enemies as well
+	new ComputerCharacter(10, 10, "NPC", 10, cTracker, new Position(XRES+3, YRES+3), gameMap);
+	new ComputerCharacter(10, 10, "NPC", 10, cTracker, new Position(XSIZE/2 + 2, YSIZE/2 +3), gameMap);
         //initGameWallBorder();
     }
     
-    // Method that sets border to wall.
-    private void initGameWallBorder() {
-        // First do long side
-        for (int i=0; i<XRES/2; i++) {
-            for (int j=0; j<YSIZE+YRES; j++) {
-                gameMap[i][j] = gameMap[i+XSIZE][j] = 1;
-            }
-        }
-        // Then do short side. ATM corners are done twice.
-        for (int i=0; i<YRES/2; i++) {
-            for (int j=0; j<XSIZE; j++) {
-                gameMap[j][i] = gameMap[j][i+YSIZE] = 1;
-            }
-        }
-    }
 
     // Returns current state of the game
     public int[][] getGameState() {
+	int currentPosX = player.getPosition().getX();
+	int currentPosY = player.getPosition().getY();
         int x = currentPosX - XRES/2;
         int y = currentPosY - YRES/2;
+	GameMap augmentedMap = gameMap.addMaps(cTracker.getNPClist());
         for (int i=0; i<XRES; i++) {
             for (int j=0; j<YRES; j++) {
-                gameState[i][j] = gameMap[x + i][y + j];
+                gameState[i][j] = augmentedMap.get(x + i, y + j);
             }
         }
-        return gameState;
+	gameState[XRES/2][YRES/2] = 2;
+	return gameState;
     }
     
+    private void updateGameState(Position p, int spriteId) {
+	gameState[p.getX()][p.getY()] = spriteId;
+    }
+
     // Changes the game state. Called by controller.
     public void processInput (String event) {
+	// Incompatible with java version < 7.
+	/*
         switch (event) {
-            case "w": System.out.println("upate got to model"); 
-            updateCurrentPosition(currentPosX, currentPosY - 1);
+            case "w": updateCurrentPosition(0, -1);
             break;
-            case "a": updateCurrentPosition(currentPosX - 1, currentPosY);
+            case "a": updateCurrentPosition(-1, 0);
             break;
-            case "s": updateCurrentPosition(currentPosX, currentPosY + 1);
+            case "s": updateCurrentPosition(0, 1);
             break;
-            case "d": updateCurrentPosition(currentPosX + 1, currentPosY);
+            case "d": updateCurrentPosition(1, 0);
             break;
-            case "start":  currentPosX = (XSIZE + XRES)/2;
-                           currentPosY = (YSIZE + YRES)/2;
-                           break;
-        }
+            case "start":  break;
+	    }*/
         // This needs to be called for the notifyObservers to actually
-        // notify observers. INTUITIVE! HAHAHA.
-        setChanged();                     
-        notifyObservers();
+        // notify observers. INTUITIVE! HAHAHA.  Java 6 compatible
+        // work around for Torbjorns laptop currently without internet
+        // and thus unable to obtain java 7.
+	if (event.equals("w")) {
+            updateCurrentPosition(0, -1);
+	    runAIandNotify();
+	} else if (event.equals("a")) {
+	    updateCurrentPosition(-1, 0);
+	    runAIandNotify();
+	} else if (event.equals("s")) {
+	    updateCurrentPosition(0, 1);
+	    runAIandNotify();
+	} else if (event.equals("d")) {
+	    updateCurrentPosition(1, 0);
+	    runAIandNotify();
+	} else if (event.equals("q")) {
+	    updateCurrentPosition(-1, -1);
+	    runAIandNotify();
+	} else if (event.equals("e")) {
+	    updateCurrentPosition(1, -1);
+	    runAIandNotify();
+	} else if (event.equals("z")) {
+	    updateCurrentPosition(-1, 1);
+	    runAIandNotify();
+	}  else if (event.equals("x")) {
+	    updateCurrentPosition(1, 1);
+	    runAIandNotify();
+	}
     }
      
-    
-    
-    private void initGameMap() {
-        for (int i=0; i<XSIZE + XRES; i++) {
-            for (int j=0; j<YSIZE + YRES; j++) {
-                gameMap[i][j]=1;
-            }
-        }
+    private void runAIandNotify() {
+	runAI();
+	setChanged();                     
+	notifyObservers();
     }
-    
+
     // Method to update current position of protagonist
-    private void updateCurrentPosition (int newX, int newY) {
-        // First delete sprite from old position
-        gameMap[currentPosX][currentPosY] = 0;
-        // Check if x position is ok
-        System.out.println("Got to updatePos");
+    private void updateCurrentPosition (int dX, int dY) {
+	int currentPosX = player.getPosition().getX();
+	int currentPosY = player.getPosition().getY();
+
+        // Check if x position is ok with regard to map edges
+	int newX = currentPosX + dX;
+	int newY = currentPosY + dY;
         if ( (XSIZE - newX) >= XRES/2 && (newX >= XRES/2) ) {
             currentPosX = newX;
         }
-        // Check if y position is ok
+        // Check if y position is ok with regard to map edges
         if ( (YSIZE - newY) >= YRES/2 && (newY >= YRES/2) ) {
             currentPosY = newY;
         } 
         // Place character in new position
-        gameMap[currentPosX][currentPosY] = 2;
+	if (player.checkMove(new Position(currentPosX, currentPosY)) ) {
+	    player.move(new Position(currentPosX, currentPosY));
+	}
     }
     
+    private void runAI() {
+	// First let AI do its moves
+	Iterator<Character> enemies = cTracker.getNPClist().iterator();
+	while(enemies.hasNext()) {
+	    ((ComputerCharacter) enemies.next()).doTurn();
+	}
+    }
+
     // Constants that determine size of playing field in tiles.
     private int XSIZE;
     private int YSIZE;
@@ -105,8 +139,8 @@ public class Model extends Observable{
     private int YRES;
     
     // Variables for storing gamestates
-    private int[][] gameMap;
+    private GameMap gameMap;
     private int[][] gameState;
-    private int currentPosX;
-    private int currentPosY;
+    private PlayerCharacter player;
+    private CharacterTracker cTracker;
 }

@@ -28,7 +28,9 @@ public class AgressiveBrain extends AIBrain {
 	    // Do some random walk
 	    int dx = (int) ((Math.random() - 0.5) * 4);
 	    int dy = (int) ((Math.random() - 0.5) * 4);
-	    body.move(dx, dy);
+	    if (body.checkMove(dx, dy)) {
+		body.move(dx, dy);
+	    }
 	}
 	return true;
     }

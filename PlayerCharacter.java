@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class PlayerCharacter extends Character {
     private CharacterTracker cTracker;
 
-    public PlayerCharacter (int moveSpeed, int hp, String name, int sightRange, CharacterTracker ct, Position p) {
+    public PlayerCharacter (int moveSpeed, int hp, String name, int sightRange, CharacterTracker ct, Position p, GameMap gm) {
 	this.moveSpeed = moveSpeed;
 	this.hp = hp;
 	this.name = name;
@@ -16,6 +16,7 @@ public class PlayerCharacter extends Character {
 	super.id++;
 	cTracker.addPlayer(this);
 	spriteId = 2;
+	gameMap = gm;
     }
 
     public void attack(Character c) {
@@ -25,6 +26,12 @@ public class PlayerCharacter extends Character {
 
     public boolean isPC() {
 	return true;
+    }
+
+    public boolean checkMove(Position newPos) {
+	// Checks for walls and other Characters returns true if move
+	// is ok
+	return (gameMap.get(newPos) != 1) && (!cTracker.isOccupied(newPos));
     }
 
     public void interact() {
