@@ -84,19 +84,33 @@ public class RuneDrawer implements MouseListener, MouseMotionListener{
             BufferedImage img = currentRune.returnImage();
             File f = new File("MyFile.png");
             File f2= new File("CircleRune.png");
+            File f3= new File("NearCircleRune.png");
+            
             BufferedImage circleIm = null;
+            BufferedImage nearCircleIm = null;
             try{
                 ImageIO.write(img, "PNG",  f);
                 circleIm = ImageIO.read(f2);
+                nearCircleIm = ImageIO.read(f3);
             }catch(IOException eee){
                 System.out.println("What the fuuu");
             }
             
             Rune idealRune = new Rune(getListFromIm(circleIm));
-            
+            Rune testRune  = new Rune(getListFromIm(nearCircleIm));
+
+
+            // Things to test any comparison algorithm
+            // 1) A rune to itself should be a perfect match
+            // 2) A rune with very small defects should match itself
+            // NOTE THAT THIS DOESN'T NECESSARILY HAVE TO APPLY
+            // 3) A.match(B) == B.match(A) 
+            //
             boolean yuss = currentRune.similarTo(idealRune);
+            System.out.println("drawn image was similar to "+yuss);
             
-            
+            boolean whut = idealRune.similarTo(testRune);
+            System.out.println("close circle was"+whut);
             
             
             System.out.println("Done!");
@@ -122,7 +136,7 @@ public class RuneDrawer implements MouseListener, MouseMotionListener{
         for(int i=0;i<im.getWidth();i++){
             for(int j=0;j<im.getHeight();j++){
                 if(im.getRGB(i,j)==-16777216){
-                    System.out.println("i="+i+", j="+j);
+                    //~ System.out.println("i="+i+", j="+j);
                     p = new Point(i,j);
                     testList.add(p);
                 }

@@ -4,6 +4,7 @@
 // different formats and comparing with different runes. 
 
 import java.util.ArrayList;
+import java.util.*;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
@@ -38,25 +39,30 @@ class Rune{
         
         // Moves the rune so that it starts at (0,0)
         normalize(); 
-        
-        
+                
         // Resizes the rune so that it has the uniform runeSize
         double ratio = ((double)runeSize-1)/Math.max(inputWidth, inputHeight);
         rescale(ratio);
         
+        // Finds the coolest skateboard for under 20 dollars. 
+        removeDuplicates();
+        
+        // Finds the actual width and Height of the Rune. Probably
+        // not really necessary, we know that the larger is 50 and
+        // the smaller is floor(ratio*min(inputWidth, inputHeight)
         corners = getCorners();
         runeWidth  = corners[2] - corners[0];
         runeHeight = corners[3] - corners[1];
+        
+        center();
     } 
  
     //~   Implement this image constructor in a nice way
+    // For some reason I cannot really get it to work
     //~ public Rune(BufferedImage img){
         //~ this(getListFromIm(img));
     //~ }
-    
-    public void addPoint(Point p){
-        runeList.add(p);
-    }
+
     
     public void printRune(){
         for(int i=0;i<runeList.size();i++){
@@ -105,11 +111,10 @@ class Rune{
         int corners[] = new int[] {minX, minY, maxX, maxY};
         return corners;
     }
-    
 
+    
     public BufferedImage returnImage(){
         // upon creation the rune should note its own sie using the above method
-
         System.out.println("The width is " + runeWidth + " and the height is " + runeHeight);
         
         BufferedImage runeImage = new BufferedImage(runeSize, runeSize, BufferedImage.TYPE_INT_RGB);
@@ -129,50 +134,19 @@ class Rune{
         runeImage.setRGB(0,0,runeSize,runeSize,whites,0,1);
         
         // Color the relevant pixels black
-        int xOffset = (runeSize-runeWidth)/2;
-        int yOffset = (runeSize-runeHeight)/2;
-        System.out.println("Xoffset is " + xOffset + " and yOffset is " + yOffset);
         for(int i=0;i<runeList.size();i++){
             Point pixel = runeList.get(i);
-            int x = (int) pixel.getX()+xOffset;
-            int y = (int) pixel.getY()+yOffset;
-            System.out.println("x="+x+", y="+y);
+            int x = (int) pixel.getX();
+            int y = (int) pixel.getY();
             runeImage.setRGB(x, y, black);
         }
         
         return runeImage;
         // ferdigh
+    }
 
-        
-        
-    }
-    
-    // moves the rune into the right place
-    public void normalize(){
-        for(int i=0;i<runeList.size();i++){
-            Point pixel = runeList.get(i);
-            double x = pixel.getX()-minX; // Both of these numbers
-            double y = pixel.getY()-minY; // should be integers
-            pixel.setLocation(x,y);
-            runeList.set(i, pixel);
-        }
-        
-    }
-    
-    // Rescales the rune with a factor 'ratio'
-    public void rescale(double ratio){
-        System.out.println("ratio="+ratio);
-        for(int i=0;i<runeList.size();i++){
-            Point pixel = runeList.get(i);
-            // Should be careful how things are rounded here but let's
-            // try this first
-            double x = Math.floor(pixel.getX()*ratio); 
-            double y = Math.floor(pixel.getY()*ratio);
-            pixel.setLocation(x,y);
-            runeList.set(i, pixel);
-        }
-    }
-    
+    // Compares this rune to another rune and determines if the arey are
+    // "similar". Currently 
     public boolean similarTo(Rune otherRune){
         double[] dist = new double[runeList.size()];
         Point p;
@@ -193,11 +167,60 @@ class Rune{
             return true;
         }
     }
+
+    
+    // moves the rune into the right place
+    public void normalize(){
+        for(int i=0;i<runeList.size();i++){
+            Point pixel = runeList.get(i);
+            double x = pixel.getX()-minX; // Both of these numbers
+            double y = pixel.getY()-minY; // should be integers
+            pixel.setLocation(x,y);
+            runeList.set(i, pixel);
+        }
+        
+    }
+    
+    // Rescales the rune with a factor 'ratio'
+    private void rescale(double ratio){
+        System.out.println("ratio="+ratio);
+        for(int i=0;i<runeList.size();i++){
+            Point pixel = runeList.get(i);
+            // Should be careful how things are rounded here but let's
+            // try this first
+            double x = Math.floor(pixel.getX()*ratio); 
+            double y = Math.floor(pixel.getY()*ratio);
+            pixel.setLocation(x,y);
+            runeList.set(i, pixel);
+        }
+    }
+    
+    
+    private void center(){
+        for(int i=0;i<runeList.size();i++){
+            Point pixel = runeList.get(i);
+            // Should be careful how things are rounded here but let's
+            // try this first
+            int xOffset = (runeSize-runeWidth)/2;
+            int yOffset = (runeSize-runeHeight)/2;       
+            double x = Math.floor(pixel.getX()+xOffset); 
+            double y = Math.floor(pixel.getY()+yOffset);
+            pixel.setLocation(x,y);
+            runeList.set(i, pixel);
+        }
+    }
+    
+    private void removeDuplicates(){
+        Set<Point> tmpSet = new HashSet<Point>(runeList);
+        runeList = new ArrayList<Point>(tmpSet);        
+    }
+
+
     
     // For each pixel in the image computes the minimum distance to the rune
     // currently uses a stupid brute force algorithm because let's just try
-    Point p;
-    public double[][] getMinDistance(){
+    private double[][] getMinDistance(){
+        Point p;
         double[][] minDist = new double[runeSize][runeSize];
         for(int i=0;i<runeSize;i++){
             for(int j=0;j<runeSize;j++){
@@ -206,7 +229,7 @@ class Rune{
                     p = runeList.get(k);
                     double xDiff = p.getX()-i;
                     double yDiff = p.getY()-j; 
-                    double dist =  Math.sqrt((xDiff*xDiff)+(yDiff*yDiff));
+                    double dist =  ((xDiff*xDiff)+(yDiff*yDiff));
                     if(dist < currMin){
                         minDist[i][j] = dist;
                         currMin = dist;
@@ -218,7 +241,36 @@ class Rune{
     }
     
 
+    // Does all the work of the other pixel fixing functions.
+    // It is a matter of style I think if it's nicer to do it this way
+    // or to have several "smaller" functions. 
+    private void reshape(){
+        for(int i=0;i<runeList.size();i++){
+            Point pixel = runeList.get(i);
 
+            // Moves the pixels to [0, inputSize] interval
+            double x = pixel.getX()-minX; // Both of these numbers
+            double y = pixel.getY()-minY; // should be integers
+
+            // Rescales the pixels to the [0, runeSize-1] interval
+            double ratio = ((double)runeSize-1)/Math.max(inputWidth, inputHeight);
+            x = Math.floor(x*ratio); 
+            y = Math.floor(y*ratio);
+
+            // Shifts particles so they are centered around runeSize/2            
+            runeWidth = (int)Math.floor(inputWidth*ratio);
+            runeHeight= (int)Math.floor(inputHeight*ratio);
+            System.out.println("runeWidth="+runeWidth+", runeHeight="+runeHeight);            
+            int xOffset = (runeSize-runeWidth)/2;
+            int yOffset = (runeSize-runeHeight)/2;       
+            x = x+xOffset;
+            y = y+yOffset;   
+
+            // Saves the modified pixels
+            pixel.setLocation(x,y);
+            runeList.set(i, pixel);
+        }
+    }
 }
     
         
