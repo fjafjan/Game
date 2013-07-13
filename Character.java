@@ -22,6 +22,14 @@ public abstract class Character {
     public String toString() {
 	return "" + myId;
     }
+
+    public int hashCode() {
+	return myId;
+    }
+
+    public boolean equals(Character c) {
+	return c.hashCode() == hashCode();
+    }
     
     public abstract boolean isPC();
 
@@ -36,8 +44,13 @@ public abstract class Character {
     }
 
     public abstract void getAttacked(int damage);
+
     public int getSpriteId() {
 	return spriteId;
+    }
+
+    public void die() {
+	cTracker.remove(this);
     }
 	
     protected static int id = 0;
@@ -49,4 +62,6 @@ public abstract class Character {
     protected int sightRange;
     protected int myId;
     protected GameMap gameMap;
+    protected CharacterTracker cTracker;
+
 }

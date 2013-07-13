@@ -21,10 +21,10 @@ public class Model extends Observable{
 	int initX = (XSIZE + XRES)/2;
 	int initY = (YSIZE + YRES)/2;
 	Position initPos = new Position(initX, initY);
-	player = new PlayerCharacter(10, 10, "player", 10, cTracker, initPos, gameMap);
+	player = new PlayerCharacter(10, 40, "player", 10, cTracker, initPos, gameMap);
 	// Lets add some enemies as well
-	new ComputerCharacter(10, 10, "NPC", 10, cTracker, new Position(XRES+3, YRES+3), gameMap);
-	new ComputerCharacter(10, 10, "NPC", 10, cTracker, new Position(XSIZE/2 + 2, YSIZE/2 +3), gameMap);
+	new ComputerCharacter(10, 10, "NPC", 1, cTracker, new Position(XRES+3, YRES+3), gameMap);
+	new ComputerCharacter(10, 10, "NPC", 1, cTracker, new Position(XSIZE/2 + 2, YSIZE/2 +3), gameMap);
         //initGameWallBorder();
     }
     
@@ -48,6 +48,28 @@ public class Model extends Observable{
     private void updateGameState(Position p, int spriteId) {
 	gameState[p.getX()][p.getY()] = spriteId;
     }
+
+    private void spawnMonster() {
+	// This method can of course be changed so as to spawn
+	// different types of monsters randomly. 
+	int x1 = (int) Math.floor(Math.random() * XSIZE) + XRES;
+	int y1 = (int) Math.floor(Math.random() * YSIZE) + YRES;
+	// Check that position is not already occupied
+	int loopCount = 0;
+	int maxAttempts = 5;
+	Position p = new Position(x1, y1);
+	while ((cTracker.isOccupied(p) || gameMap.get(p) == 1) 
+	    && (loopCount < maxAttempts)) {
+	    x1 = (int) Math.floor(Math.random() * XSIZE) + XRES;
+	    y1 = (int) Math.floor(Math.random() * YSIZE) + YRES;
+	    loopCount++;
+	}
+	if(loopCount<maxAttempts){
+		new ComputerCharacter(10, 10, "NPC", 1, cTracker, new Position(x1, y1), gameMap);
+	}else{
+		System.out.println("We failed to spawn a monster!");
+    }
+	}
 
     // Changes the game state. Called by controller.
     public void processInput (String event) {
@@ -74,7 +96,7 @@ public class Model extends Observable{
 	} else if (event.equals("a")) {
 	    updateCurrentPosition(-1, 0);
 	    runAIandNotify();
-	} else if (event.equals("s")) {
+	} else if (event.equals("s") || event.equals("x")) {
 	    updateCurrentPosition(0, 1);
 	    runAIandNotify();
 	} else if (event.equals("d")) {
@@ -89,7 +111,7 @@ public class Model extends Observable{
 	} else if (event.equals("z")) {
 	    updateCurrentPosition(-1, 1);
 	    runAIandNotify();
-	}  else if (event.equals("x")) {
+	}  else if (event.equals("c")) {
 	    updateCurrentPosition(1, 1);
 	    runAIandNotify();
 	}
@@ -97,6 +119,9 @@ public class Model extends Observable{
      
     private void runAIandNotify() {
 	runAI();
+	if (Math.random() > 0.9) {
+	    spawnMonster();
+	}
 	setChanged();                     
 	notifyObservers();
     }

@@ -1,12 +1,15 @@
-import javax.swing.*
-import java.awt.*
+import javax.swing.*;
+import java.awt.*;
 
 
-public class Tile extends Jpanel{
+public class Tile extends JPanel{
     public final int x;
-    public final int y
+    public final int y;
     public Tile(int xPos, int yPos){
         x = xPos;
         y = yPos;
+    }
     public void paint(Graphics g){
-        g.drawOv
+        // whatev
+    }
+}

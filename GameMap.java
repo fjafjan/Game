@@ -113,6 +113,10 @@ public class GameMap {
     public int get(int x, int y) {
 	return _map[x][y];
     }
+    
+    public int[] getSize(){
+		return new int[]{_xSize, _ySize};
+	}
 
     private int _xSize;
     private int _ySize;

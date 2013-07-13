@@ -43,6 +43,34 @@ public class Position {
 	y = y + dy;
     }
 
+    /* This method creates a string representation of a position. The
+     * representation is unique for each position with unique x,y
+     * combination. The string is created simply by looking at the
+     * integer part of x and y and padding in front with zeroes. */
+    public String toString() {
+	String str = "";
+	int padZeroes = (int) Math.floor(Math.log10((double) x)) + 1;
+	for (int i=0; i<5-padZeroes; i++) {
+	    str += "0";
+	}
+	str += x;
+	padZeroes = (int) Math.floor(Math.log10((double) y)) + 1;
+	for (int i=0; i<5-padZeroes; i++) {
+	    str += "0";
+	}
+	str += y;
+	return str;
+    }
+
+    public int hashCode() {
+	// Lols this is so wierd.
+	return Integer.parseInt(toString());
+    }
+
+    public Position copy() {
+	return new Position(x,y);
+    }
+
     private int x;
     private int y;
 }

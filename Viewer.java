@@ -38,119 +38,70 @@ public class Viewer extends JFrame implements Observer{
 		initUI();
 	}
 
-	public final void initUI(){
+    public final void initUI(){
 	//	int model = fulmodel;
-		panel = new JPanel();
-		getContentPane().add(panel);
+	panel = new JPanel();
+	getContentPane().add(panel);
         //~ panel.setLayout(new BorderLayout());
-		panel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-
-
+	panel.setLayout(new GridBagLayout());
+	GridBagConstraints c = new GridBagConstraints();
 		
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new GridBagLayout());
 
-		JButton quitButton = new JButton("Quit");
-		//~ quitButton.setBounds(50,60,80,30); // What do these numbers mean?
-		quitButton.setActionCommand("quit");
-		quitButton.addActionListener(gameController);
+	JButton quitButton = new JButton("Quit");
 
-		c.fill = GridBagConstraints.BOTH;
+	quitButton.setActionCommand("quit");
+	quitButton.addActionListener(gameController);
+
+	c.fill = GridBagConstraints.BOTH;
         c.gridx = 1;
         c.gridy = 0;
-		c.weightx = 0.1;
+	c.weightx = 0.1;
         c.weighty = 0.1;
-		menuPanel.add(quitButton, c);
+	menuPanel.add(quitButton, c);
 
         
-		JButton startButton = new JButton("Start game!");
-		//~ startButton.setBounds(90,100,120,80);
-		startButton.setActionCommand("start");
-		startButton.addActionListener(gameController);
-		c.gridx = 0;
-		menuPanel.add(startButton, c);
+	JButton startButton = new JButton("Start game!");
+	//~ startButton.setBounds(90,100,120,80);
+	startButton.setActionCommand("start");
+	startButton.addActionListener(gameController);
+	c.gridx = 0;
+	menuPanel.add(startButton, c);
         
         //~ c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
         //~ c.gridy = 0;
-		//~ c.weightx = 0.1;
+	//~ c.weightx = 0.1;
         //~ c.weighty = 0.1;
-        panel.add(menuPanel, c);
-		setTitle("Just trying stuff out");
-		windowWidth = 350;
-		windowHeight = 400;
-		setSize(windowWidth,windowHeight);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
-	
-	//~ public static void main(String args[]){
-		//~ SwingUtilities.invokeLater(new Runnable() {
-			//~ public void run(){
-				//~ Viewer view = new Viewer();
-                //~ view.drawGame();
-				//~ view.setVisible(true);
-			//~ }
-		//~ });
-	//~ }
-	
-	public static void startGame(){
-		// nothing for now?
-	}
+
+//        panel.add(menuPanel, c);
+	setTitle("Just trying stuff out");
+	windowWidth = 600;
+	windowHeight = 600;
+	setSize(windowWidth,windowHeight);
+	setLocationRelativeTo(null);
+	setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+		
+    public static void startGame(){
+	    // nothing for now?
+    }
 	
     public void update(Observable obs, Object o){
         drawGame();
     }
     
     
-	public void drawGame(){
-        // clean out the old frame
-        try{
-            panel.remove(oldFrame);
-        }catch(Exception e){
-            //whatever
-        }
-		int[][] gameState = gameModel.getGameState();
+    public void drawGame(){        
+	int[][] gameState = gameModel.getGameState();
         BufferedImage bImage = new BufferedImage(windowWidth, windowHeight,
-        BufferedImage.TYPE_INT_RGB);
+						 BufferedImage.TYPE_INT_RGB);
         Graphics2D drawer = bImage.createGraphics();
         
         xPos = 0;yPos = 0;
         xStep = windowWidth/gameState.length;
 	yStep = xStep; //windowHeight/gameState[0].length;
-
-        //~ System.out.println(xStep + " and" + yStep);
-        //~ for(int i=0;i<gameState.length;i++){
-            //~ System.out.println("");
-            //~ for(int j=0;j<gameState[0].length;j++){
-                //~ System.out.print(gameState[i][j]);
-            //~ }
-        //~ }
-
-        for(int i=0;i<gameState.length;i++){
-            xPos = i*xStep;
-			for(int j=0;j<gameState[0].length;j++){
-                yPos = j*yStep;
-				int drawType = gameState[i][j];
-                
-                // Gives us what to draw given the game state in this pos
-                RectangularShape drawObj = getDrawObj(drawType);
-                Color chosenColor = getDrawColor(drawType);
-
-
-                // Now we draw the component we have detected      
-                drawer.setColor(chosenColor);
-                drawer.fill(drawObj);
-
-                // And we draw a contour around it
-                RectangularShape contour = new Rectangle2D.Double(xPos,yPos,xStep,yStep);
-                drawer.setColor(Color.black);
-                drawer.draw(contour);
-            }
-        }
-        oldFrame = new JLabel(new ImageIcon(bImage));
-        
 
         GamePanel gamePanel = new GamePanel(gameState, windowWidth, windowHeight);
         //~ gamePanel.setPreferredSize(new Dimension(windowWidth, windowHeight));
@@ -160,22 +111,12 @@ public class Viewer extends JFrame implements Observer{
         c.weighty = 0.5;
         c.gridx = 0;
         c.gridy = 1;
-		//~ gamePanel.setLayout(gameLayout);
-        //~ gamePanel.setLayout(new GridLayout(gameWidth,gameHeight));
-		//~ int xStep = windowWidth/gameState.length;
-		//~ int yStep = windowHeight/gameState[0].length;
-        //~ JPanel gameHolder = new JPanel();
-        //~ gameHolder.setLayout(new BoxLayout(gameHolder,  BoxLayout.PAGE_AXIS));
-        //~ gameHolder.add(gamePanel);
-		//~ panel.add(gameHolder, c);
         RuneDrawer runeDraw = new RuneDrawer();
         gamePanel.addMouseListener(runeDraw);
         gamePanel.addMouseMotionListener(runeDraw);
         panel.add(gamePanel,c);	
-		//~ gamePanel.repaint();
-        //~ panel.add(oldFrame, c);
-		panel.repaint();
-	}
+	panel.repaint();
+    }
     
     private Graphics2D drawGrid(Graphics2D g){
         return g;

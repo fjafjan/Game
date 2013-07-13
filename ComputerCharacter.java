@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public class ComputerCharacter extends Character {
 
     private AIBrain myBrain;
-    private CharacterTracker cTracker;
 
     public ComputerCharacter() {
 	moveSpeed = 1;
@@ -61,6 +60,11 @@ public class ComputerCharacter extends Character {
     public boolean checkMove(Position newPos) {
 	// Checks for walls and other Characters returns true if move
 	// is ok
+	int[] gameSize = gameMap.getSize();
+    if(((newPos.getX() < 0) || (newPos.getX() >= gameSize[0])) ||
+	   ((newPos.getY() < 0) || (newPos.getY() >= gameSize[1]))){
+        return false;
+	}
 	return ((gameMap.get(newPos) != 1) && (!cTracker.isOccupied(newPos)));
     }
 
@@ -77,7 +81,23 @@ public class ComputerCharacter extends Character {
 	int damage = 2;
 	c.getAttacked(damage);
     }
+    
     public void getAttacked(int damage) {
 	hp = hp - damage;
+	// Check if dead.
+	if (hp <=0) {
+	    die();
+	}   
     }
+    // Overrides default move, by also notifying the CharacterTracker about its whereabouts.
+    public void move(Position newPos) {
+	pos = newPos;
+	cTracker.updatePosition(this);
+    }
+
+    public void move(int dx, int dy) {
+	pos.translate(dx, dy);
+	cTracker.updatePosition(this);
+    }
+
 }

@@ -30,7 +30,7 @@ public class Controller implements ActionListener, KeyListener{
 	
     public void keyPressed(KeyEvent e){
 	String keyPressed = e.getKeyText(e.getKeyCode());
-	System.out.println(keyPressed);
+//	System.out.println(keyPressed);
 	/*if(keyPressed.equals("W") || keyPressed.equals("Up")){
 	    // tell game to move up
 	    System.out.println("w pressed");
