@@ -1,5 +1,8 @@
 /* This is a representation of a game map which can be used for the
- * main background map as well as sprite maps etc... */
+ * main background map as well as sprite maps etc. It stores the map
+ * as a grid of 16x16 tiles. It should be turned into a singleton, as
+ * only one instance can exist. Thus we dont have to bother with
+ * passing it around between objects. */
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -11,12 +14,14 @@ public class GameMap {
 	_ySize = 100;
 	_map = new int[_xSize][_ySize];
 	generateEmptyMap();
+	TILESIZE = GameConstants.TILESIZE;
     }
 
     public GameMap(int xSize, int ySize) {
 	_xSize = xSize;
 	_ySize = ySize;
 	_map = new int[xSize][ySize];
+	TILESIZE = GameConstants.TILESIZE;
 	generateEmptyMap();
     }
 
@@ -113,11 +118,26 @@ public class GameMap {
     public int get(int x, int y) {
 	return _map[x][y];
     }
-    
-    public int[] getSize(){
-		return new int[]{_xSize, _ySize};
-	}
 
+    public int getTileFromPixel(int pX, int pY) {
+	System.out.println("Map returned: " + _map[pX/TILESIZE][pY/TILESIZE] + "and pX/TILESIZE is" + pX/TILESIZE);
+	return _map[pX/TILESIZE][pY/TILESIZE];
+    }
+    
+    public int getTileFromPixel(Position p) {
+	return getTileFromPixel(p.getX(), p.getY());
+    }
+
+    // Returns size in tiles.
+    public int[] getSize() {
+	return new int[]{_xSize, _ySize};
+    }
+
+    public int[] getSizeInPixels() {
+	return new int[]{_xSize*TILESIZE, _ySize*TILESIZE};
+    }
+
+    private int TILESIZE;
     private int _xSize;
     private int _ySize;
     private int[][] _map;

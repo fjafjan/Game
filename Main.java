@@ -12,9 +12,11 @@ import javax.swing.SwingUtilities;
 
 public class Main{
     public static void main(String[] args ){
-	Model gameModel = new Model();
+	// mapDimension is the size of the map in pixels
+	int[] screenResolution = new int[]{320, 320};
+	Model gameModel = new Model(screenResolution);
 	Controller gameController = new Controller(gameModel);
-	Viewer gameViewer = new Viewer(gameController);
+	Viewer gameViewer = new Viewer(gameController, screenResolution);
 	gameViewer.addKeyListener(gameController);
 	gameViewer.setFocusable(true);
         gameModel.addObserver(gameViewer);

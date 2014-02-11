@@ -19,10 +19,16 @@ import java.awt.image.BufferedImage;
 public class Viewer extends JFrame implements Observer{
     private static int windowWidth;
     private static int windowHeight;
-    private static int gameWidth; // I want these to be final but it won't compile...
-    private static int gameHeight;
+    private static int gameWidth; // In tiles
+    private static int gameHeight; // In tiles
     private int xPos, yPos;
     private int xStep, yStep;
+
+    /* This constant determines the number of pixels in a tile
+       side. Since tiles are square they are of dimension TILESIZE *
+       TILESIZE */
+    private int TILESIZE = 16;
+
 
     private JLabel oldFrame;
 	private static JPanel panel;
@@ -30,15 +36,16 @@ public class Viewer extends JFrame implements Observer{
 	private Model gameModel;
 	private Controller gameController;
 	
-	public Viewer(Controller gameController){
-		gameModel = gameController.getModel();
-		int[][] gameState = gameModel.getGameState();
-		gameWidth = gameState.length;
-		gameHeight= gameState[0].length;
-		initUI();
-	}
+    public Viewer(Controller gameController, int[] resolution){
+	gameModel = gameController.getModel();
+	GameState gameState = gameModel.getGameState();
+	TILESIZE = GameConstants.TILESIZE;
+	gameWidth = resolution[0]/TILESIZE;
+	gameHeight= resolution[1]/TILESIZE;
+	initUI(resolution);
+    }
 
-    public final void initUI(){
+    public final void initUI(int[] resolution){
 	//	int model = fulmodel;
 	panel = new JPanel();
 	getContentPane().add(panel);
@@ -77,9 +84,10 @@ public class Viewer extends JFrame implements Observer{
 
 //        panel.add(menuPanel, c);
 	setTitle("Just trying stuff out");
-	windowWidth = 600;
-	windowHeight = 600;
-	setSize(windowWidth,windowHeight);
+	int TITLEBARHEIGHT = 50;
+	windowWidth = resolution[0];
+	windowHeight = resolution[1];
+	setSize(windowWidth+10,windowHeight+30);
 	setLocationRelativeTo(null);
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
@@ -94,14 +102,14 @@ public class Viewer extends JFrame implements Observer{
     
     
     public void drawGame(){        
-	int[][] gameState = gameModel.getGameState();
-        BufferedImage bImage = new BufferedImage(windowWidth, windowHeight,
-						 BufferedImage.TYPE_INT_RGB);
-        Graphics2D drawer = bImage.createGraphics();
+	GameState gameState = gameModel.getGameState();
+        //BufferedImage bImage = new BufferedImage(windowWidth, windowHeight,
+	//						 BufferedImage.TYPE_INT_RGB);
+	//Graphics2D drawer = bImage.createGraphics();
         
         xPos = 0;yPos = 0;
-        xStep = windowWidth/gameState.length;
-	yStep = xStep; //windowHeight/gameState[0].length;
+        xStep = TILESIZE;
+	yStep = TILESIZE;
 
         GamePanel gamePanel = new GamePanel(gameState, windowWidth, windowHeight);
         //~ gamePanel.setPreferredSize(new Dimension(windowWidth, windowHeight));
@@ -114,7 +122,7 @@ public class Viewer extends JFrame implements Observer{
         RuneDrawer runeDraw = new RuneDrawer();
         gamePanel.addMouseListener(runeDraw);
         gamePanel.addMouseMotionListener(runeDraw);
-        panel.add(gamePanel,c);	
+        panel.add(gamePanel,c);
 	panel.repaint();
     }
     

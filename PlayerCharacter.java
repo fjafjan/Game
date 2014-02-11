@@ -39,9 +39,10 @@ public class PlayerCharacter extends Character {
 	    System.out.println("Player trying to move to occupied square!!!");
 	    attack(newPos);
 	    return false;
-	} else if (gameMap.get(newPos) == 0) {
+	} else if (gameMap.getTileFromPixel(newPos) == 0){
 	    return true;
 	} else {
+	    System.out.println("square is occupied lols");
 	    return false;
 	}
     }

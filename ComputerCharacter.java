@@ -14,7 +14,7 @@ public class ComputerCharacter extends Character {
 	sightRange = 10;
 	myBrain = new AgressiveBrain(this);
 	myId = super.id;
-	spriteId = 2;
+	spriteId = 3;
 	super.id++;
     }
 
@@ -29,7 +29,7 @@ public class ComputerCharacter extends Character {
 	myBrain = new AgressiveBrain(this);
 	cTracker = ct;
 	pos = p;
-	spriteId = 2;
+	spriteId = 3;
 	myId = super.id;
 	super.id++;
 	cTracker.add(this);
@@ -60,12 +60,14 @@ public class ComputerCharacter extends Character {
     public boolean checkMove(Position newPos) {
 	// Checks for walls and other Characters returns true if move
 	// is ok
-	int[] gameSize = gameMap.getSize();
-    if(((newPos.getX() < 0) || (newPos.getX() >= gameSize[0])) ||
-	   ((newPos.getY() < 0) || (newPos.getY() >= gameSize[1]))){
+	int[] gameSize = gameMap.getSizeInPixels();
+	if(( (newPos.getX() < 0) ||
+	     (newPos.getX() >= gameSize[0]) ) ||
+	   ( (newPos.getY() < 0) ||
+	     (newPos.getY() >= gameSize[1])) ){
         return false;
 	}
-	return ((gameMap.get(newPos) != 1) && (!cTracker.isOccupied(newPos)));
+	return ((gameMap.getTileFromPixel(newPos) != 1) && (!cTracker.isOccupied(newPos)));
     }
 
     public boolean checkMove(int dx, int dy) {
